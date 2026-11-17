@@ -129,12 +129,36 @@ function setupEventListeners() {
         });
     });
     
-    elements.homeIndicator?.addEventListener('click', goHome);
-    elements.homeIndicator?.addEventListener('touchstart', (e) => { touchStartY = e.touches[0].clientY; });
+    // تفعيل سحب مؤشر الشاشة السفلي (Home Indicator) للأعلى للرجوع للشاشة الرئيسية
+    elements.homeIndicator?.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+    });
+    
     elements.homeIndicator?.addEventListener('touchend', (e) => {
         const diff = touchStartY - e.changedTouches[0].clientY;
-        if (diff > 50 && !isInApp) openControlCenter();
-        else if (isInApp) goHome();
+        // إذا كان السحب للأعلى بأكثر من 35 بكسل
+        if (diff > 35) {
+            if (isInApp) goHome();
+        } else {
+            // سحب خفيف أو نقرة (تفتح مركز التحكم إذا لم تكن داخل تطبيق)
+            if (!isInApp && diff < -10) openControlCenter();
+        }
+    });
+
+    // دعم الماوس (السحب للأعلى من مؤشر الشاشة)
+    let isDraggingIndicator = false;
+    elements.homeIndicator?.addEventListener('mousedown', (e) => {
+        isDraggingIndicator = true;
+        touchStartY = e.clientY;
+    });
+    
+    document.addEventListener('mouseup', (e) => {
+        if (!isDraggingIndicator) return;
+        isDraggingIndicator = false;
+        const diff = touchStartY - e.clientY;
+        if (diff > 40 && isInApp) {
+            goHome();
+        }
     });
     
     elements.controlCenter?.addEventListener('click', (e) => {
@@ -314,7 +338,7 @@ function openApp(appId) {
     }
 }
 
-// دالة العودة للشاشة الرئيسية بانسيابية تامة وسلسة
+// دالة العودة للشاشة الرئيسية عن طريق سحب الشريط السفلي للأعلى
 function goHome() {
     if (!isInApp) {
         if (isControlCenterOpen) closeControlCenter();
