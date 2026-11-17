@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>واتساب</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { 
+            font-family: -apple-system, 'IBM Plex Sans Arabic', sans-serif; 
+            height: 100%; 
+            background: #000; 
+            color: white; 
+            overflow: hidden; 
+        }
+        .whatsapp-app { display: flex; flex-direction: column; height: 100%; }
+        
+        /* Header */
+        .header { 
+            padding: 45px 20px 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: #000; 
+        }
+        .header-title-row {
+            padding: 0 20px 10px;
+            background: #000;
+        }
+        .header-title-row h1 { font-size: 32px; font-weight: 700; }
+        .header-btn { 
+            background: none; 
+            border: none; 
+            color: #25d366; 
+            font-size: 17px; 
+            font-family: inherit;
+            cursor: pointer; 
+        }
+        .header-icons { display: flex; gap: 15px; align-items: center; }
+        .new-chat-btn {
+            background: #25d366;
+            color: #000;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Search Bar */
+        .search-bar { padding: 5px 15px 12px; background: #000; border-bottom: 0.5px solid #222; }
+        .search-input { 
+            width: 100%; 
+            padding: 9px 15px; 
+            background: #1c1c1e; 
+            border: none; 
+            border-radius: 10px; 
+            color: white; 
+            font-size: 16px; 
+            font-family: inherit;
+        }
+        .search-input::placeholder { color: #8e8e93; }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 8px;
+            padding: 10px 15px;
+            background: #000;
+        }
+        .filter-chip {
+            background: #1c1c1e;
+            color: #8e8e93;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .filter-chip.active {
+            background: #103629;
+            color: #25d366;
+        }
+
+        /* Conversation List */
+        .conversation-list { flex: 1; overflow-y: auto; }
+        .conversation-item { 
+            display: flex; 
+            gap: 12px; 
+            padding: 12px 15px; 
+            border-bottom: 0.5px solid #1c1c1e; 
+            cursor: pointer; 
+            align-items: center;
+        }
+        .conversation-item:active { background: #1c1c1e; }
+        .avatar { 
+            width: 54px; 
+            height: 54px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 24px; 
+            flex-shrink: 0; 
+        }
+        .conv-info { flex: 1; min-width: 0; }
+        .conv-header { display: flex; justify-content: space-between; margin-bottom: 4px; align-items: center; }
+        .conv-name { font-size: 17px; font-weight: 600; color: #fff; }
+        .conv-time { font-size: 13px; color: #8e8e93; }
+        .unread .conv-time { color: #25d366; font-weight: 600; }
+        
+        .conv-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .conv-preview { 
+            font-size: 15px; 
+            color: #8e8e93; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .ticks { color: #53bdeb; font-size: 14px; font-weight: bold; }
+        .unread-badge {
+            background: #25d366;
+            color: #000;
+            font-size: 12px;
+            font-weight: 700;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 6px;
+        }
+
+        /* Bottom Tab Bar */
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 25px;
+            background: #161618;
+            border-top: 0.5px solid #2c2c2e;
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #8e8e93;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .tab-item.active { color: #25d366; }
+        .tab-icon { font-size: 20px; }
+
+        /* Chat View */
+        .chat-view { 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: #0b141a; 
+            display: none; 
+            flex-direction: column; 
+            z-index: 100; 
+        }
+        .chat-view.active { display: flex; }
+        .chat-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            padding: 45px 15px 12px; 
+            background: #161618; 
+            border-bottom: 0.5px solid #2c2c2e;
+        }
+        .btn-back { 
+            background: none; 
+            border: none; 
+            color: #25d366; 
+            font-size: 32px; 
+            line-height: 1;
+            cursor: pointer; 
+            padding-left: 5px;
+        }
+        .chat-avatar { 
+            width: 38px; 
+            height: 38px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 18px; 
+        }
+        .chat-user-info { flex: 1; }
+        .chat-name { font-size: 16px; font-weight: 600; }
+        .chat-status { font-size: 12px; color: #8e8e93; }
+        .chat-actions { display: flex; gap: 16px; color: #25d366; font-size: 20px; }
+
+        /* Chat Messages Area */
+        .chat-messages { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+        .message { 
+            max-width: 78%; 
+            padding: 8px 12px; 
+            border-radius: 14px;  
+            font-size: 15px; 
+            line-height: 1.4; 
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.received { 
+            background: #202c33; 
+            align-self: flex-start; 
+            border-top-right-radius: 4px; 
+        }
+        .message.sent { 
+            background: #005c4b; 
+            align-self: flex-end; 
+            border-top-left-radius: 4px; 
+        }
+        .msg-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 3px;
+        }
+
+        /* PDF Document Bubble Style */
+        .pdf-document {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+        .pdf-icon-box {
+            width: 40px;
+            height: 48px;
+            background: #ff5252;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .pdf-icon-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-width: 0 10px 10px 0;
+            border-style: solid;
+            border-color: rgba(255,255,255,0.6) #005c4b;
+            border-bottom-left-radius: 4px;
+        }
+        .pdf-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .pdf-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pdf-subtitle {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 2px;
+        }
+
+        /* Input Area */
+        .chat-input-area { 
+            display: flex; 
+            align-items: center;
+            gap: 10px; 
+            padding: 10px 15px 30px; 
+            background: #161618; 
+        }
+        .attach-btn { color: #25d366; font-size: 24px; background: none; border: none; cursor: pointer; }
+        .chat-input { 
+            flex: 1; 
+            padding: 10px 15px; 
+            background: #2c2c2e; 
+            border: none; 
+            border-radius: 20px; 
+            color: white; 
+            font-size: 15px; 
+            font-family: inherit;
+        }
+        .btn-send { 
+            background: #25d366; 
+            border: none; 
+            width: 36px; 
+            height: 36px; 
+            border-radius: 50%; 
+            color: #000; 
+            font-size: 18px; 
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer; 
+        }
+    </style>
+</head>
+<body>
+    <div class="whatsapp-app">
+        <!-- Top Bar -->
+        <div class="header">
+            <button class="header-btn">تعديل</button>
+            <div class="header-icons">
+                <button class="header-btn">📷</button>
+                <button class="new-chat-btn">+</button>
+            </div>
+        </div>
+        <div class="header-title-row">
+            <h1>الدردشات</h1>
+        </div>
+
+        <!-- Search -->
+        <div class="search-bar">
+            <input type="text" class="search-input" id="search-input" placeholder="بحث">
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="filters">
+            <div class="filter-chip active">الكل</div>
+            <div class="filter-chip">غير مقروءة</div>
+            <div class="filter-chip">المجموعات</div>
+        </div>
+
+        <!-- Conversations -->
+        <div class="conversation-list" id="conversation-list"></div>
+
+        <!-- Bottom Navigation -->
+        <div class="tab-bar">
+            <div class="tab-item"><span class="tab-icon">⭕</span><span>المستجدات</span></div>
+            <div class="tab-item"><span class="tab-icon">📞</span><span>المكالمات</span></div>
+            <div class="tab-item"><span class="tab-icon">👥</span><span>المجتمعات</span></div>
+            <div class="tab-item active"><span class="tab-icon">💬</span><span>الدردشات</span></div>
+            <div class="tab-item"><span class="tab-icon">⚙️</span><span>الإعدادات</span></div>
+        </div>
+
+        <!-- Chat View -->
+        <div class="chat-view" id="chat-view">
+            <div class="chat-header">
+                <button class="btn-back" id="btn-back">›</button>
+                <div class="chat-avatar" id="chat-avatar" style="background: #25d366;">👤</div>
+                <div class="chat-user-info">
+                    <div class="chat-name" id="chat-name">جهة الاتصال</div>
+                    <div class="chat-status" id="chat-status">متصل الآن</div>
+                </div>
+                <div class="chat-actions">
+                    <span>📹</span>
+                    <span>📞</span>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <button class="attach-btn">+</button>
+                <input type="text" class="chat-input" id="chat-input" placeholder="رسالة">
+                <button class="btn-send" id="btn-send">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const conversations = [
+            { 
+                id: 1, name: 'شركة مقاولات', avatar: '🏗️', color: '#202c33', status: 'متصل الآن',
+                preview: 'نعتذر منك', time: '9:05 ص', unread: 2, sentByMe: false,
+                messages: [
+                    { text: 'سلام عليكم , انا اخصائي نظم وتقنية معلومات ومهتم بالعمل معكم', sent: true, time: '7:00 م' }, 
+                    // تم إدراج مرفق الـ PDF هنا ضمن رسائل المحادثة
+                    { isPdf: true, pdfName: 'اخصائي نظم معلومات.pdf', pdfSize: '1.2 MB • PDF', sent: true, time: '7:01 م' },
+                    { text: 'نبي مصري ', sent: false, time: '9:02 ص' }, 
+                    { text: ' نعتذر منك ', sent: false, time: '9:05 ص' }
+                ]
+            },
+            { 
+                id: 2, name: ' خالد ', avatar: '', color: '#007aff', status: 'آخر ظهور اليوم 6:40 م',
+                preview: 'خلاص الله يوفقك', time: '6:30 م', unread: 0, sentByMe: true,
+                messages: [
+                    { text: 'السلام عليكم، فاضي بكرة', sent: true, time: '6:15 م' }, 
+                    { text: 'وعليكم السلام لاوالله مداوم امرني؟', sent: false, time: '6:20 م' }, 
+                    { text: 'خلاص الله يوفقك', sent: true, time: '6:30 م' }
+                ]
+            },
+        {
+             id: 3, name: 'شركة مش حالك ', avatar: '', color: '#202c33', status: 'متصل الآن',
+                preview: 'اخصائي نظم معلومات.pdf', time: '9:05 ص',  sentByMe: true,
+                messages: [
+                    { text: ' سلام عليكم , انا اخصائي نظم وتقنية معلومات ومهتم بالعمل معكم وعادي بشتغل حارس امن', sent: true, time: '7:00 م' }, 
+                    // تم إدراج مرفق الـ PDF هنا ضمن رسائل المحادثة
+                    { isPdf: true, pdfName: 'اخصائي نظم معلومات.pdf', pdfSize: '1.2 MB • PDF', sent: true, time: '7:01 م' },
+
+                ]
+            },
+             {
+             id: 4, name: 'شركة الديناصور  ', avatar: '', color: '#202c88', status: 'متصل الآن',
+                preview: 'بص يلا ماتستخفش دمك تاني ونعتذر منك مافيش وظائف ', time: '2:20 م',  sentByMe: false,
+                messages: [
+                    { text: ' سلام عليكم سمعت ان عندكم وظائف , انا اخصائي نظم وتقنية معلومات ومهتم بالعمل معكم    ', sent: true, time: '2:20 م' }, 
+                    // تم إدراج مرفق الـ PDF هنا ضمن رسائل المحادثة
+                    { isPdf: true, pdfName: 'اخصائي نظم معلومات.pdf', pdfSize: '1.2 MB • PDF', sent: true, time: '2:20 م' },
+                    { text: 'سعودي حضرتك؟ ', sent: false, time: '6:20 م' }, 
+                   { text: ' لا مصري ', sent: true, time: '6:20 م' }, 
+                   { text: 'فيه مدير قسم بمرتب  ريال 13000 وسكن ومواصلات مجاني ', sent: false, time: '2:20 م' },
+                   { text: 'بس انا سعودي ', sent: true, time: '6:20 م' }, 
+                   { text: 'بص يلا ماتستخفش دمك تاني ونعتذر منك مافيش وظائف    ', sent:  false, time: '2:20 م' }, 
+
+
+ 
+
+
+
+
+                ]
+            },
+           
+        ];
+
+        const list = document.getElementById('conversation-list');
+        const searchInput = document.getElementById('search-input');
+
+        function renderConversations(filterText = '') {
+            const filtered = conversations.filter(c => c.name.includes(filterText) || c.preview.includes(filterText));
+            list.innerHTML = filtered.map(c => `
+                <div class="conversation-item ${c.unread > 0 ? 'unread' : ''}" data-id="${c.id}">
+                    <div class="avatar" style="background: ${c.color}">${c.avatar}</div>
+                    <div class="conv-info">
+                        <div class="conv-header">
+                            <span class="conv-name">${c.name}</span>
+                            <span class="conv-time">${c.time}</span>
+                        </div>
+                        <div class="conv-footer">
+                            <div class="conv-preview">
+                                ${c.sentByMe ? '<span class="ticks">✓✓</span>' : ''}
+                                <span>${c.preview}</span>
+                            </div>
+                            ${c.unread > 0 ? `<span class="unread-badge">${c.unread}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            attachClickEvents();
+        }
+
+        const chatView = document.getElementById('chat-view');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatName = document.getElementById('chat-name');
+        const chatStatus = document.getElementById('chat-status');
+        const chatAvatar = document.getElementById('chat-avatar');
+        const chatInput = document.getElementById('chat-input');
+        let activeConv = null;
+
+        function attachClickEvents() {
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    activeConv = conversations.find(c => c.id == item.dataset.id);
+                    activeConv.unread = 0; // تصفير الرسائل غير المقروءة عند الفتح
+                    renderConversations(searchInput.value);
+
+                    chatName.textContent = activeConv.name;
+                    chatStatus.textContent = activeConv.status;
+                    chatAvatar.textContent = activeConv.avatar;
+                    chatAvatar.style.background = activeConv.color;
+                    
+                    renderMessages();
+                    chatView.classList.add('active');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+            });
+        }
+
+        function renderMessages() {
+            if (!activeConv) return;
+            chatMessages.innerHTML = activeConv.messages.map(m => {
+                if (m.isPdf) {
+                    return `
+                        <div class="message sent">
+                            <div class="pdf-document">
+                                <div class="pdf-icon-box">PDF</div>
+                                <div class="pdf-details">
+                                    <div class="pdf-title">${m.pdfName}</div>
+                                    <div class="pdf-subtitle">${m.pdfSize}</div>
+                                </div>
+                            </div>
+                            <div class="msg-meta">
+                                <span>${m.time}</span>
+                                <span class="ticks">✓✓</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="message ${m.sent ? 'sent' : 'received'}">
+                            <span>${m.text}</span>
+                            <div class="msg-meta">
+                                <span>${m.time}</span>
+                                ${m.sent ? '<span class="ticks">✓✓</span>' : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        document.getElementById('btn-back').addEventListener('click', () => {
+            chatView.classList.remove('active');
+            activeConv = null;
+        });
+
+        document.getElementById('btn-send').addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+        searchInput.addEventListener('input', e => renderConversations(e.target.value));
+
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (text && activeConv) {
+                const now = new Date();
+                const timeStr = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
+                
+                activeConv.messages.push({ text, sent: true, time: timeStr });
+                activeConv.preview = text;
+                activeConv.time = timeStr;
+                activeConv.sentByMe = true;
+
+                renderMessages();
+                renderConversations(searchInput.value);
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
+
+        // التشغيل الأولي
+        renderConversations();
+    </script>
+</body>
+</html>

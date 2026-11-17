@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي جوال عاطل سعودي</title>
+    <meta name="description" content="جرّب نظام iOS داخل المتصفح مع محاكي iPhone واقعي">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="simulator.css">
+    <style>
+        /* تعديل موقع حاوية الإشعارات لتنزل أسفل التاريخ بمسافة مريحة */
+        .lock-notifications-container {
+            top: 210px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="background-container">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="stars"></div>
+    </div>
+
+    <div class="simulator-container">
+        <div class="iphone-frame">
+            <!-- Dynamic Island -->
+            <div class="dynamic-island" id="dynamic-island">
+                <div class="island-content">
+                    <div class="island-camera"></div>
+                    <div class="island-indicator" id="island-indicator"></div>
+                </div>
+            </div>
+
+            <!-- Screen Content -->
+            <div class="screen" id="screen">
+                <!-- Lock Screen -->
+                <div class="lock-screen" id="lock-screen">
+                    <div class="lock-status-bar">
+                        <div class="lock-time" id="lock-time">21:15</div>
+                        <div class="lock-date" id="lock-date">الاثنين، ٢٣ ديسمبر</div>
+                        <!-- عبارة أسفل التاريخ مباشرة -->
+                        <div style="font-size: 13.5px; color: rgba(255,255,255,0.7); margin-top: 6px; font-weight: 500; letter-spacing: 0.2px;">محاكي جوال عاطل سعودي</div>
+                    </div>
+                    
+                    <!-- === إشعارات شاشة القفل === -->
+                    <div class="lock-notifications-container" id="lock-notifications-container">
+                        
+                        <!-- إشعار WhatsApp -->
+                        <div class="lock-notif-item" onclick="unlockAndOpen('whatsapp')">
+                            <div class="lock-notif-icon">
+                                <svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#25d366"/><path d="M60 22C38.9 22 21.8 39.1 21.8 60.2c0 6.9 1.8 13.5 5.2 19.3L22 98l19.1-5c5.5 3 11.8 4.6 18.4 4.6 21.1 0 38.2-17.1 38.2-38.2S81.1 22 60 22zm0 69.4c-5.7 0-11.2-1.5-16-4.3l-1.1-.7-11.7 3.1 3.2-11.4-.7-1.2c-3.2-5.1-4.9-11-4.9-17.1 0-17.5 14.2-31.7 31.7-31.7s31.7 14.2 31.7 31.7-14.2 31.7-31.7 31.7zm17.4-23.7c-.9-.5-5.5-2.7-6.4-3-.9-.3-1.6-.5-2.3.5-.7 1-2.7 3.4-3.3 4.1-.6.7-1.3.8-2.2.4-1-.5-4.2-1.5-8-4.9-3-2.7-5-6-5.6-7-.6-1-.1-1.5.4-2 .4-.4.9-1 1.3-1.5.4-.5.6-.9.9-1.5.3-.6.1-1.2-.1-1.7-.3-.5-2.3-5.5-3.2-7.5-.8-1.9-1.7-1.6-2.3-1.6h-2c-.7 0-1.8.3-2.7 1.3-.9 1-3.5 3.4-3.5 8.3s3.6 9.6 4.1 10.3c.5.7 7.1 10.9 17.2 15.3 2.4 1 4.3 1.6 5.8 2.1 2.4.8 4.6.7 6.3.4 1.9-.3 5.5-2.3 6.3-4.4.8-2.1.8-3.9.6-4.3-.2-.4-.8-.7-1.7-1.2z" fill="#fff"/></svg>
+                            </div>
+                            <div class="lock-notif-content">
+                                <div class="lock-notif-header">
+                                    <span class="lock-notif-app">WhatsApp</span>
+                                    <span class="lock-notif-time">الآن</span>
+                                </div>
+                                <div class="lock-notif-title">شركة مقاولات</div>
+                                <div class="lock-notif-body">نعتذر منك</div>
+                            </div>
+                        </div>
+
+                        <div class="lock-notif-item" onclick="unlockAndOpen('messages')">
+                            <div class="lock-notif-icon">
+                                <svg viewBox="0 0 120 120"><rect width="120" height="120" fill="url(#g-green)"/><path d="M60 22c-24 0-43 15-43 34 0 11 6 20 15 27-1 7-5 13-10 17 9 0 17-4 22-9 5 1 10 2 16 2 24 0 43-15 43-37S84 22 60 22z" fill="#fff"/></svg>
+                            </div>
+                            <div class="lock-notif-content">
+                                <div class="lock-notif-header">
+                                    <span class="lock-notif-app">الرسائل</span>
+                                    <span class="lock-notif-time">الآن</span>
+                                </div>
+                                <div class="lock-notif-title">STC</div>
+                                <div class="lock-notif-body">عزيزي العميل نشعركم ب انتهاء باقة انترنت لامحدود لمدة شهر (28يوم).</div>
+                            </div>
+                        </div>
+
+                        <!-- إشعار LinkedIn -->
+                        <div class="lock-notif-item" onclick="unlockAndOpen('linkedin')">
+                            <div class="lock-notif-icon">
+                                <svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#0a66c2"/><rect x="28" y="46" width="14" height="46" rx="3" fill="#fff"/><circle cx="35" cy="27" r="8" fill="#fff"/><path d="M58 46h13.4v6.5h.2c1.9-3.5 6.5-7.2 13.4-7.2 14.3 0 17 9.4 17 21.6V92H88.6V71.8c0-4.8-.1-11-6.7-11-6.7 0-7.7 5.2-7.7 10.6V92H58V46z" fill="#fff"/></svg>
+                            </div>
+                            <div class="lock-notif-content">
+                                <div class="lock-notif-header">
+                                    <span class="lock-notif-app">LinkedIn</span>
+                                    <span class="lock-notif-time">منذ 5د</span>
+                                </div>
+                                <div class="lock-notif-title">LinkedIn</div>
+                                <div class="lock-notif-body">لقد انهى ALMALKI دورة في ZIP حان دورك!</div>
+                            </div>
+                        </div>
+
+                        <!-- إشعار Mail (البريد) -->
+                        <div class="lock-notif-item" onclick="unlockAndOpen('mail')">
+                            <div class="lock-notif-icon">
+                                <svg viewBox="0 0 120 120"><rect width="120" height="120" fill="url(#g-blue)"/><rect x="18" y="32" width="84" height="58" rx="9" fill="#fff"/><path d="M22 40l38 29 38-29" fill="none" stroke="#1a7cff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <div class="lock-notif-content">
+                                <div class="lock-notif-header">
+                                    <span class="lock-notif-app">البريد</span>
+                                    <span class="lock-notif-time">منذ 20د</span>
+                                </div>
+                                <div class="lock-notif-title">شركة مقاولات الديناصورات المتحدة</div>
+                                <div class="lock-notif-body">نتيجة التقديم على وظيفة IT</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="lock-bottom">
+                        <div class="flashlight-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2v6l2 1v2h8V9l2-1V2H6zm3 9v11h6V11H9z"/></svg>
+                        </div>
+                        <div class="swipe-indicator">
+                            <span>اسحب للأعلى لفتح القفل</span>
+                        </div>
+                        <div class="camera-btn">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.2c1.8 0 3.2-1.4 3.2-3.2s-1.4-3.2-3.2-3.2-3.2 1.4-3.2 3.2 1.4 3.2 3.2 3.2zM9 2L7.2 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.2L15 2H9zm3 15c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Home Screen -->
+                <div class="home-screen" id="home-screen" style="display: none;">
+                    <!-- Status Bar -->
+                    <div class="status-bar">
+                        <div class="status-left">
+                            <span class="time" id="status-time">21:15</span>
+                        </div>
+                        <div class="status-right">
+                            <div class="signal-bars">
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                                <span class="bar"></span>
+                            </div>
+                            <span class="wifi-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+                                </svg>
+                            </span>
+                            <span class="battery">
+                                <div class="battery-level"></div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Wallpaper -->
+                    <div class="wallpaper" id="wallpaper"></div>
+
+                    <!-- App Grid -->
+                    <div class="app-grid">
+                        <!-- Page 1 -->
+                        <div class="app-page active" id="page-1">
+                            <!-- Row 1 -->
+                            <div class="app-icon" data-app="clock">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الساعة</span>
+                            </div>
+                            <div class="app-icon" data-app="calculator">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الآلة الحاسبة</span>
+                            </div>
+                            <div class="app-icon" data-app="photos">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الصور</span>
+                            </div>
+                            <div class="app-icon" data-app="camera">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الكاميرا</span>
+                            </div>
+
+                            <!-- Row 2 -->
+                            <div class="app-icon" data-app="notes">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الملاحظات</span>
+                            </div>
+                            <div class="app-icon" data-app="settings">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الإعدادات</span>
+                            </div>
+                            <div class="app-icon" data-app="safari">
+                                <div class="icon-img"></div>
+                                <span class="app-name">Safari</span>
+                            </div>
+                            <div class="app-icon" data-app="music">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الموسيقى</span>
+                            </div>
+
+                            <!-- Row 3 -->
+                            <div class="app-icon" data-app="maps">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الخرائط</span>
+                            </div>
+                            <div class="app-icon" data-app="messages">
+                                <div class="icon-img"></div>
+                                <span class="notification-badge">30</span>
+                                <span class="app-name">الرسائل</span>
+                            </div>
+                            <div class="app-icon" data-app="mail">
+                                <div class="icon-img"></div>
+                                <span class="notification-badge">1110</span>
+                                <span class="app-name">البريد</span>
+                            </div>
+                            <div class="app-icon" data-app="whatsapp">
+                                <div class="icon-img"></div>
+                                <span class="notification-badge">7</span>
+                                <span class="app-name">WhatsApp</span>
+                            </div>
+
+                            <!-- Row 4 -->
+                            <div class="app-icon" data-app="linkedin">
+                                <div class="icon-img"></div>
+                                <span class="notification-badge">3</span>
+                                <span class="app-name">LinkedIn</span>
+                            </div>
+                            <div class="app-icon" data-app="appstore">
+                                <div class="icon-img"></div>
+                                <span class="app-name">App Store</span>
+                            </div>
+                            <div class="app-icon" data-app="files">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الملفات</span>
+                            </div>
+                            <div class="app-icon" data-app="health">
+                                <div class="icon-img"></div>
+                                <span class="app-name">الصحة</span>
+                            </div>
+                            <div class="app-icon" data-app="x">
+                                <div class="icon-img"></div>
+                                <span class="app-name">X</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page Dots -->
+                    <div class="page-dots">
+                        <span class="dot active"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+
+                    <!-- Dock -->
+                    <div class="dock">
+                        <div class="dock-bg"></div>
+                        <div class="dock-icons">
+                            <div class="app-icon dock-icon" data-app="phone">
+                                <div class="icon-img"></div>
+                            </div>
+                            <div class="app-icon dock-icon" data-app="safari">
+                                <div class="icon-img"></div>
+                            </div>
+                            <div class="app-icon dock-icon" data-app="messages">
+                                <div class="icon-img"></div>
+                            </div>
+                            <div class="app-icon dock-icon" data-app="music">
+                                <div class="icon-img"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- App View Container -->
+                <div class="app-view" id="app-view" style="display: none;">
+                    <iframe id="app-iframe" src="" frameborder="0"></iframe>
+                    <div class="app-loading" id="app-loading">
+                        <div class="app-loading-icon"></div>
+                        <p>جارٍ التحميل…</p>
+                    </div>
+                </div>
+
+                <!-- Control Center -->
+                <div class="control-center" id="control-center">
+                    <div class="control-handle"></div>
+                    <div class="control-grid">
+                        <!-- عناصر مركز التحكم -->
+                    </div>
+                </div>
+
+                <!-- Home Indicator -->
+                <div class="home-indicator" id="home-indicator"></div>
+            </div>
+
+            <!-- Side Buttons -->
+            <div class="side-button volume-up"></div>
+            <div class="side-button volume-down"></div>
+            <div class="side-button power"></div>
+            <div class="side-button silent-switch"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span class="toast-message" id="toast-message"></span>
+    </div>
+
+    <script>
+        function unlockAndOpen(appId) {
+            if (typeof unlock === 'function') {
+                unlock();
+                setTimeout(() => {
+                    if (typeof openApp === 'function') {
+                        openApp(appId);
+                    }
+                }, 400);
+            }
+        }
+    </script>
+    <script src="ios-icons.js"></script>
+    <script src="simulator.js"></script>
+</body>
+</html>

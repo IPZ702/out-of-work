@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>الإعدادات</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            font-family: -apple-system, 'IBM Plex Sans Arabic', sans-serif;
+            height: 100%;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .settings-app {
+            min-height: 100%;
+            background: #000;
+        }
+
+        .header {
+            padding: 45px 20px 12px;
+            text-align: center;
+            background: #1c1c1e;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 0.5px solid #2c2c2e;
+        }
+
+        .header h1 { font-size: 18px; font-weight: 600; }
+
+        .content {
+            padding: 20px 0;
+            padding-bottom: 40px;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: #1c1c1e;
+            border-radius: 12px;
+            margin: 0 15px 25px;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #5ac8fa, #007aff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .profile-info { flex: 1; min-width: 0; }
+        .profile-info h2 {
+            font-size: 17px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-info p {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-top: 2px;
+        }
+
+        .profile-arrow {
+            color: #8e8e93;
+            font-size: 18px;
+        }
+
+        /* Settings Groups */
+        .settings-group {
+            background: #1c1c1e;
+            border-radius: 12px;
+            margin: 0 15px 25px;
+            overflow: hidden;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 0.5px solid #2c2c2e;
+            cursor: pointer;
+        }
+
+        .settings-item:last-child { border-bottom: none; }
+        .settings-item:active { background: #2c2c2e; }
+
+        .settings-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-left: 12px; /* تعديل المسافة للغة العربية */
+            flex-shrink: 0;
+        }
+
+        .settings-label {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .settings-value {
+            color: #8e8e93;
+            font-size: 15px;
+            margin-left: 5px;
+        }
+
+        .settings-arrow {
+            color: #8e8e93;
+            font-size: 16px;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            width: 51px;
+            height: 31px;
+            background: #39393d;
+            border-radius: 16px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle.active { background: #30d158; }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 27px;
+            height: 27px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            right: 2px; /* تعديل الاتجاه للغة العربية */
+            transition: transform 0.3s;
+        }
+
+        .toggle.active::after { transform: translateX(-20px); } /* عكس حركة الزر للغة العربية */
+
+        /* Icon Colors */
+        .icon-blue { background: #007aff; }
+        .icon-green { background: #30d158; }
+        .icon-orange { background: #ff9500; }
+        .icon-red { background: #ff3b30; }
+        .icon-purple { background: #af52de; }
+        .icon-pink { background: #ff2d55; }
+        .icon-gray { background: #8e8e93; }
+        .icon-teal { background: #5ac8fa; }
+    </style>
+</head>
+<body>
+    <div class="settings-app">
+        <div class="header">
+            <h1>الإعدادات</h1>
+        </div>
+
+        <div class="content">
+            <!-- Profile -->
+            <div class="profile-section">
+                <div class="profile-avatar">👨🏻‍💻</div>
+                <div class="profile-info">
+                    <h2>علي الزهراني</h2>
+                    <p>Apple ID، الوسائط والمشتريات</p>
+                </div>
+                <span class="profile-arrow">‹</span>
+            </div>
+
+            <!-- Main Settings -->
+            <div class="settings-group">
+                <div class="settings-item">
+                    <div class="settings-icon icon-orange">✈️</div>
+                    <span class="settings-label">وضع الطيران</span>
+                    <div class="toggle" data-setting="airplane"></div>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">📶</div>
+                    <span class="settings-label">Wi-Fi</span>
+                    <span class="settings-value">Home_WiFi</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">📱</div>
+                    <span class="settings-label">البلوتوث</span>
+                    <span class="settings-value">مفعل</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-green">📡</div>
+                    <span class="settings-label">البيانات الخلوية</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-green">🔗</div>
+                    <span class="settings-label">نقطة الاتصال الشخصية</span>
+                    <span class="settings-value">متوقف</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-item">
+                    <div class="settings-icon icon-red">🔔</div>
+                    <span class="settings-label">الإشعارات</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-purple">🔊</div>
+                    <span class="settings-label">الأصوات واللمس</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-purple">🌙</div>
+                    <span class="settings-label">تسهيلات التركيز</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">⏰</div>
+                    <span class="settings-label">مدة استخدام الجهاز</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-item">
+                    <div class="settings-icon icon-gray">⚙️</div>
+                    <span class="settings-label">عام</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">🎚️</div>
+                    <span class="settings-label">مركز التحكم</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">💡</div>
+                    <span class="settings-label">الشاشة والسطوع</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-teal">🏠</div>
+                    <span class="settings-label">الشاشة الرئيسية</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-blue">♿</div>
+                    <span class="settings-label">إمكانية الوصول</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-pink">🎨</div>
+                    <span class="settings-label">خلفية الشاشة</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-item">
+                    <div class="settings-icon icon-green">🔋</div>
+                    <span class="settings-label">البطارية</span>
+                    <span class="settings-value">٨٧٪</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-icon icon-gray">🔐</div>
+                    <span class="settings-label">الخصوصية والأمان</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <div class="settings-item">
+                    <div class="settings-icon" style="background: linear-gradient(135deg, #5ac8fa, #007aff);">🔑</div>
+                    <span class="settings-label">كلمات المرور</span>
+                    <span class="settings-arrow">‹</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle switches
+        document.querySelectorAll('.toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                toggle.classList.toggle('active');
+            });
+        });
+
+        // Clickable items
+        document.querySelectorAll('.settings-item').forEach(item => {
+            if (!item.querySelector('.toggle')) {
+                item.addEventListener('click', () => {
+                    const label = item.querySelector('.settings-label').textContent;
+                    // تفاعل خفيف عند النقر
+                });
+            }
+        });
+    </script>
+</body>
+</html>

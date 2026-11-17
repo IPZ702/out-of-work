@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>الرسائل</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { 
+            font-family: -apple-system, 'IBM Plex Sans Arabic', sans-serif; 
+            height: 100%; 
+            background: #000; 
+            color: white; 
+            overflow: hidden; 
+        }
+        .messages-app { display: flex; flex-direction: column; height: 100%; }
+        
+        .header { 
+            padding: 45px 20px 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: #000; 
+        }
+        .header-title-row {
+            padding: 0 20px 10px;
+            background: #000;
+        }
+        .header-title-row h1 { font-size: 32px; font-weight: 700; }
+        .header-btn { background: none; border: none; color: #007aff; font-size: 17px; cursor: pointer; font-family: inherit; }
+        
+        .search-bar { padding: 5px 15px 12px; background: #000; }
+        .search-input { 
+            width: 100%; 
+            padding: 9px 15px; 
+            background: #1c1c1e; 
+            border: none; 
+            border-radius: 10px; 
+            color: white; 
+            font-size: 16px; 
+            font-family: inherit;
+        }
+        .search-input::placeholder { color: #8e8e93; }
+        
+        .conversation-list { flex: 1; overflow-y: auto; }
+        .conversation-item { 
+            display: flex; 
+            justify-content: space-between;
+            padding: 14px 20px; 
+            border-bottom: 0.5px solid #1c1c1e; 
+            cursor: pointer; 
+            align-items: center;
+        }
+        .conversation-item:active { background: #1c1c1e; }
+        .conv-info { flex: 1; min-width: 0; }
+        .conv-header { display: flex; justify-content: space-between; margin-bottom: 3px; align-items: center; }
+        .conv-name { font-size: 17px; font-weight: 600; color: #fff; }
+        .conv-time { font-size: 13px; color: #8e8e93; }
+        .conv-preview { 
+            font-size: 14px; 
+            color: #8e8e93; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        .conv-arrow { color: #8e8e93; font-size: 18px; margin-right: 10px; }
+        
+        .unread .conv-name { color: #fff; font-weight: 700; }
+        .unread .conv-preview { color: #fff; font-weight: 500; }
+        .unread-dot {
+            width: 10px; 
+            height: 10px; 
+            background: #007aff; 
+            border-radius: 50%; 
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Chat View */
+        .chat-view { 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background: #000; 
+            display: none; 
+            flex-direction: column; 
+            z-index: 100; 
+        }
+        .chat-view.active { display: flex; }
+        .chat-header { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 45px 15px 12px; 
+            background: #1c1c1e; 
+            border-bottom: 0.5px solid #2c2c2e;
+        }
+        .btn-back { background: none; border: none; color: #007aff; font-size: 30px; cursor: pointer; line-height: 1; }
+        .chat-name { flex: 1; font-size: 17px; font-weight: 600; text-align: center; margin-right: 30px; }
+        
+        .chat-messages { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+        .message-time-stamp {
+            text-align: center;
+            font-size: 11px;
+            color: #8e8e93;
+            margin: 5px 0;
+        }
+        .message { 
+            max-width: 82%; 
+            padding: 10px 14px; 
+            border-radius: 18px; 
+            font-size: 15px; 
+            line-height: 1.4; 
+        }
+        .message.received { 
+            background: #262628; 
+            align-self: flex-start; 
+            border-bottom-left-radius: 4px; 
+            color: #fff;
+        }
+        .message.sent { 
+            background: #007aff; 
+            align-self: flex-end; 
+            border-bottom-right-radius: 4px; 
+            color: white; 
+        }
+        
+        .chat-input-area { 
+            display: flex; 
+            gap: 10px; 
+            padding: 10px 15px 30px; 
+            background: #1c1c1e; 
+            align-items: center;
+        }
+        .chat-input { 
+            flex: 1; 
+            padding: 10px 15px; 
+            background: #2c2c2e; 
+            border: none; 
+            border-radius: 20px; 
+            color: white; 
+            font-size: 15px; 
+            font-family: inherit;
+        }
+        .btn-send { 
+            background: #007aff; 
+            border: none; 
+            width: 35px; 
+            height: 35px; 
+            border-radius: 50%; 
+            color: white; 
+            font-size: 16px; 
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="messages-app">
+        <div class="header">
+            <button class="header-btn">تحديد</button>
+            <button class="header-btn">✏️</button>
+        </div>
+        <div class="header-title-row">
+            <h1>الرسائل</h1>
+        </div>
+        <div class="search-bar">
+            <input type="text" class="search-input" id="search-input" placeholder="بحث">
+        </div>
+        
+        <div class="conversation-list" id="conversation-list"></div>
+
+        <!-- Chat View -->
+        <div class="chat-view" id="chat-view">
+            <div class="chat-header">
+                <button class="btn-back" id="btn-back">‹</button>
+                <div class="chat-name" id="chat-name">الجهة</div>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input" placeholder="رسالة نصية سريعة">
+                <button class="btn-send" id="btn-send">↑</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const conversations = [
+            { 
+                id: 1, name: 'STC', preview: 'عزيزي العميل نشعركم ب انتهاء باقة انترنت لامحدود لمدة شهر (28يوم).', time: 'الان', unread: true, 
+                messages: [
+                    { text: 'زيزي العميل نشعركم ب انتهاء باقة انترنت لامحدود لمدة شهر (28يوم).', sent: false, time: 'أمس ٨:٣٠ م' },
+                ]
+            },
+            { 
+                id: 2, name: 'المرور السعودي', preview: 'تم تسجيل مخالفة مرورية (سرعة زائدة) بقيمة 300 ريال.', time: 'الأمس', unread: true, 
+                messages: [
+                    { text: 'عزيزي السائق، تم تسجيل مخالفة مرورية (تجاوز السرعة المحددة) بتاريخ اليوم في تمام الساعة ٣:١٥ عصراً، وقيمة المخالفة ٣٠٠ ريال.', sent: false, time: 'الأمس ٤:٠٠ ص' }
+                ]
+            },
+            { 
+                id: 3, name: 'Tabby | تابي', preview: 'تم تأكيد طلبك! باقي عليك دفعتين مستحقة.', time: '٢٢ فبراير', unread: false, 
+                messages: [
+                    { text: 'مرحباً، تم بنجاح سداد الدفعة الأولى لمشترياتك من متجر تأمين التعاونية بقيمة 452 ريال. نراكم في الدفعة القادمة!', sent: false, time: '٢٢ فبراير' }
+                ]
+            },
+            { 
+                id: 4, name: 'Tamara | تمارا', preview: 'تذكير: موعد سداد قسطك القادم غداً بقيمة 180 ريال.', time: '١٨ فبراير', unread: false, 
+                    messages: [
+                    { text: 'عزيزي العميل، تذكير بأن موعد سداد القسط القادم لطلباتك عبر تمارا هو غداً بقيمة ١٨٠ ريال. نسعد بخدمتكم.', sent: false, time: '١٨ فبراير' }
+                ]
+            },
+            { 
+                id: 5, name: 'AlRajhi Bank', preview: 'عميلنا العزيز، الرصيد غير كافي.', time: '٢٧ يناير', unread: false, 
+                messages: [
+                    { text: 'عميلنا العزيز، الرصيد غير كافي للعملية 5181 . تفاصيل الحساب متاحة عبر تطبيق الراجحي.', sent: false, time: '٢٧ يناير' }
+                ]
+            },
+           
+        ];
+
+        const list = document.getElementById('conversation-list');
+        const searchInput = document.getElementById('search-input');
+
+        function renderList(filter = '') {
+            const filtered = conversations.filter(c => c.name.includes(filter) || c.preview.includes(filter));
+            list.innerHTML = filtered.map(c => `
+                <div class="conversation-item ${c.unread ? 'unread' : ''}" data-id="${c.id}">
+                    <div class="conv-info">
+                        <div class="conv-header">
+                            <span class="conv-name">${c.name}</span>
+                            <span class="conv-time">${c.time}</span>
+                        </div>
+                        <div class="conv-preview">${c.preview}</div>
+                    </div>
+                    ${c.unread ? '<div class="unread-dot"></div>' : '<span class="conv-arrow">›</span>'}
+                </div>
+            `).join('');
+            attachEvents();
+        }
+
+        const chatView = document.getElementById('chat-view');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatName = document.getElementById('chat-name');
+        const chatInput = document.getElementById('chat-input');
+        let activeConv = null;
+
+        function attachEvents() {
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    activeConv = conversations.find(c => c.id == item.dataset.id);
+                    activeConv.unread = 0; // قراءة الرسالة
+                    renderList(searchInput.value);
+
+                    chatName.textContent = activeConv.name;
+                    chatMessages.innerHTML = `
+                        <div class="message-time-stamp">${activeConv.time}</div>
+                    ` + activeConv.messages.map(m => `
+                        <div class="message ${m.sent ? 'sent' : 'received'}">${m.text}</div>
+                    `).join('');
+                    
+                    chatView.classList.add('active');
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                });
+            });
+        }
+
+        document.getElementById('btn-back').addEventListener('click', () => {
+            chatView.classList.remove('active');
+            activeConv = null;
+        });
+
+        document.getElementById('btn-send').addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+        searchInput.addEventListener('input', e => renderList(e.target.value));
+
+        function sendMessage() {
+            if (chatInput.value.trim() && activeConv) {
+                activeConv.messages.push({ text: chatInput.value, sent: true, time: 'الآن' });
+                activeConv.preview = chatInput.value;
+                activeConv.time = 'الآن';
+                
+                chatMessages.innerHTML += `<div class="message sent">${chatInput.value}</div>`;
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                renderList(searchInput.value);
+            }
+        }
+
+        renderList();
+    </script>
+</body>
+</html>
